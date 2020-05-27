@@ -74,7 +74,6 @@ class S3:
     def get_size(self, obj_key):
         return self.bucket.Object(obj_key).content_length
 
-    # TODO Get size with prefix and delimiter, like list
+    # TODO method to get size with prefix and delimiter, like list
 
-    def move_obj(self):  # TODO method to send a object to another bucket or path
-        pass
+    # TODO method to send a object to another bucket or path

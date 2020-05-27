@@ -2,9 +2,10 @@ import json
 import logging
 import re
 import time
+from functools import reduce
 from typing import Optional
 
-from botocore.exceptions import ClientError
+from boltons.iterutils import chunked_iter
 
 from .session import Session
 
@@ -13,7 +14,9 @@ logger = logging.getLogger(__name__)
 
 
 class Sqs:
-    def __init__(self, queue_url, region=None, session: Optional[Session] = None):
+    def __init__(
+        self, queue_url, region="us-east-1", session: Optional[Session] = None
+    ):
         if not region:
             region = re.search(r"https://sqs\.(.*)\.a", queue_url).group(
                 1
@@ -24,27 +27,42 @@ class Sqs:
         self.client = sess.client("sqs")
         self.queue_url = queue_url
 
-    def delete_message(self, receipt_handle):
-        try:
-            return self.client.delete_message(
-                QueueUrl=self.queue_url, ReceiptHandle=receipt_handle
-            )
-        except ClientError as e:
-            logging.error(e)
-            return None
+    def _batch(self, entries, key, operation, raise_on_error=False, apply=lambda x: x):
+        res_list = []
+        for i_chunk, chunk in enumerate(chunked_iter(entries, 10)):
+            payload = [
+                {"Id": str(i_chunk * 10 + i), key: apply(m)}
+                for i, m in enumerate(chunk)
+            ]
+            res = operation(QueueUrl=self.queue_url, Entries=payload)
+            print(res)
+            if raise_on_error and res.get("Failed"):
+                raise (Exception)
+            res_list.append(res)
+        return reduce(
+            lambda c, r: {
+                key: c.get(key, []) + r.get(key, []) for key in ["Successful", "Failed"]
+            },
+            res_list,
+        )
 
-    # TODO Implement a batch message sender
     def send_message(self, message=None, delay=10):
         logger.debug(f"Sending message to {self.queue_url}")
-        try:
-            return self.client.send_message(
-                QueueUrl=self.queue_url,
-                DelaySeconds=delay,
-                MessageBody=json.dumps(message),
-            )
-        except ClientError as e:
-            logging.error(e)
-            return None
+
+        return self.client.send_message(
+            QueueUrl=self.queue_url,
+            DelaySeconds=delay,
+            MessageBody=json.dumps(message),
+        )
+
+    def send_message_batch(self, messages, raise_on_error=False):
+        return self._batch(
+            messages,
+            "MessageBody",
+            self.client.send_message_batch,
+            raise_on_error,
+            json.dumps,
+        )
 
     def listen(
         self, wait_time=0, max_number_of_messages=1, poll_interval=30, auto_delete=True
@@ -82,3 +100,16 @@ class Sqs:
                     time.sleep(poll_interval)
                 else:
                     break
+
+    # TODO Implement decorator for listen
+
+    def delete_message(self, receipt_handle):
+        logger.debug(f"Deleting message {receipt_handle} from {self.queue_url}")
+        return self.client.delete_message(
+            QueueUrl=self.queue_url, ReceiptHandle=receipt_handle
+        )
+
+    def delete_message_batch(self, receipts, raise_on_error=False):
+        return self._batch(
+            receipts, "ReceiptHandle", self.client.delete_message_batch, raise_on_error
+        )
