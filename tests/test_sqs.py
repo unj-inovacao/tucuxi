@@ -1,8 +1,9 @@
-from pycloudutils.aws.sqs import Sqs_Client
-import boto3
 import logging
 
+from pycloudutils.aws.sqs import Sqs_Client
+
 logger = logging.getLogger(__name__)
+
 
 def test_send_message(sqs_url, objs):
     sqs = Sqs_Client(sqs_url, region="us-east-1")
@@ -11,7 +12,7 @@ def test_send_message(sqs_url, objs):
     logger.info(sqs.send_message(objs, delay=0))
 
 
-def test_listen_to_message(sqs_url,objs):
+def test_listen_to_message(sqs_url, objs):
     sqs = Sqs_Client(sqs_url, region="us-east-1")
 
     logger.info("Testing listen to message")
