@@ -14,14 +14,13 @@ logger = logging.getLogger(__name__)
 
 class Sqs:
     def __init__(self, queue_url, region=None, session: Optional[Session] = None):
-        if not session:
-            session = Session()
-        sess = session.get_session()
         if not region:
             region = re.search(r"https://sqs\.(.*)\.a", queue_url).group(
                 1
             )  # TODO Improve this
-
+        if not session:
+            session = Session(region_name=region)
+        sess = session.get_session()
         self.client = sess.client("sqs")
         self.queue_url = queue_url
 

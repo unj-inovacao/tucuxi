@@ -28,21 +28,22 @@ class S3:
     def view_tree(self, start="", ident=4, _level=0):
         line = "│" + ident * " "
         item = "├" + (ident - 1) * "-"
-        for folder in self.list_objects(start, "/", only_prefixes=True):
+        for folder in self.list_objects(start, "/",):
             print(line * _level + item + " " + folder[len(start) :])
-            self.view_tree(ident, folder, _level + 1)
+            self.view_tree(folder, ident, _level + 1)
         print(f"\nBucket: {self.bucket_name}")
 
-    def list_objects(self, prefix=None, delimiter=None, only_prefixes=False):
+    def list_objects(self, prefix=None, delimiter=None):
         list_kwargs = {
             "Bucket": self.bucket_name,
             "Prefix": prefix,
-            "Delimiter": delimiter,
         }
+        if delimiter:
+            list_kwargs.update({"Delimiter": delimiter})
         is_truncated = True
         while is_truncated:
             response = self.client.list_objects_v2(**list_kwargs)
-            if only_prefixes:
+            if delimiter:
                 for content in response.get("CommonPrefixes", []):
                     yield content.get("Prefix")
             else:
