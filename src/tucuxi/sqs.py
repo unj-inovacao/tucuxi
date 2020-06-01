@@ -101,8 +101,6 @@ class Sqs:
                 else:
                     break
 
-    # TODO Implement decorator for listen
-
     def delete_message(self, receipt_handle):
         logger.debug(f"Deleting message {receipt_handle} from {self.queue_url}")
         return self.client.delete_message(
@@ -113,3 +111,56 @@ class Sqs:
         return self._batch(
             receipts, "ReceiptHandle", self.client.delete_message_batch, raise_on_error
         )
+
+
+# TODO: Maybe remove original listen?
+def listen_queue(
+        *args, sqs_session, wait_time=0, max_number_of_messages=1, batch_size=1, poll_interval=30,
+        s3_session=None, error_queue=None, auto_delete=True, destination_bucket=None, **kwargs):
+
+    def func(f):
+        def w_f(*args, **kwargs):
+            while True:
+                messages = list()
+                for _ in range(batch_size):
+                    message = sqs_session.sess.receive_message(
+                        QueueUrl=sqs_session.queue_url,
+                        WaitTimeSeconds=wait_time,
+                        MaxNumberOfMessages=max_number_of_messages
+                    )
+                    if "Messages" in message:
+                        logger.info("{} messages received".format(len(messages["Messages"])))
+                        for m in messages["Messages"]:
+                            receipt_handle = m["ReceiptHandle"]
+                            m_body = m["Body"]
+                            try:
+                                if s3_session is not None:
+                                    message_content = s3_session.get_object(m_body)
+                                else:
+                                    message_content = json.loads(m_body)
+                            except Exception:
+                                logger.warning(
+                                    "Unable to handle message",
+                                    stack_info=True
+                                )
+                                continue
+                            if auto_delete:
+                                sqs_session.delete_message(
+                                    receipt_handle=receipt_handle
+                                )
+                            messages.append((receipt_handle, message_content))
+                    else:
+                        if poll_interval:
+                            time.sleep(poll_interval)
+                        else:
+                            break
+                try:
+                    f(*args, sqs_messages=messages, **kwargs)
+                except Exception as e:
+                    logger.error(f"Exception {e} occurred", stack_info=True)
+                    if error_queue is not None:
+                        error_queue.send_message(
+                            message=message,
+                        )
+        return w_f
+    return func
