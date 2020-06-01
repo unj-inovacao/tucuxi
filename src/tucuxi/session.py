@@ -25,9 +25,9 @@ class Session:
     def s3(self, bucket_name: str):
         from tucuxi import S3  # Sorry!
 
-        return S3(bucket_name, self.sess)
+        return S3(bucket_name, self)
 
-    def sqs(self, queue_url, region=None):
+    def sqs(self, queue_url, region="us-east-1"):
         from tucuxi import Sqs  # Sorry!
 
-        return Sqs(queue_url, region)
+        return Sqs(queue_url, region, self)

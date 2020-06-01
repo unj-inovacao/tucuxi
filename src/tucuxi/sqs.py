@@ -22,9 +22,9 @@ class Sqs:
                 1
             )  # TODO Improve this
         if not session:
-            session = Session(region_name=region)
+            session = Session()
         sess = session.get_session()
-        self.client = sess.client("sqs")
+        self.client = sess.client("sqs", region_name=region)
         self.queue_url = queue_url
 
     def _batch(self, entries, key, operation, raise_on_error=False, apply=lambda x: x):
