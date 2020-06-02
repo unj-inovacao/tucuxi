@@ -176,8 +176,6 @@ class Sqs:
                 else:
                     break
 
-    # TODO Implement decorator for listen
-
     def delete_message(self, receipt_handle: str) -> Any:
         """[summary]
 
@@ -207,3 +205,68 @@ class Sqs:
         return self._batch(
             receipts, "ReceiptHandle", self.client.delete_message_batch, raise_on_error
         )
+
+
+# # TODO: Maybe remove original listen?
+# def listen_queue(
+#         *args, sqs_session: Sqs, wait_time: int = 0, max_number_of_messages: int = 1, batch_size: int = 1, poll_interval: int = 30,
+#         s3_session: Optional[Any] = None, error_queue: Optional[Sqs] = None, auto_delete: bool = True, destination_bucket: Optional[S3] = None, **kwargs):
+#     """[summary]
+
+#     Args:
+#         sqs_session (Sqs): [description]
+#         wait_time (int): [description]. Defaults to 0.
+#         max_number_of_messages (int): [description]. Defaults to 1.
+#         batch_size (int): [description]. Defaults to 1.
+#         poll_interval (int): [description]. Defaults to 30.
+#         s3_session (Optional[Any]): [description]. Defaults to None.
+#         error_queue (Optional[Sqs]): [description]. Defaults to None.
+#         auto_delete (bool): [description]. Defaults to True.
+#         destination_bucket (Optional[S3]): [description]. Defaults to None.
+#     """
+#     def func(f):
+#         def w_f(*args, **kwargs):
+#             while True:
+#                 messages = list()
+#                 for _ in range(batch_size):
+#                     message = sqs_session.sess.receive_message(
+#                         QueueUrl=sqs_session.queue_url,
+#                         WaitTimeSeconds=wait_time,
+#                         MaxNumberOfMessages=max_number_of_messages
+#                     )
+#                     if "Messages" in message:
+#                         logger.info("{} messages received".format(len(messages["Messages"])))
+#                         for m in messages["Messages"]:
+#                             receipt_handle = m["ReceiptHandle"]
+#                             m_body = m["Body"]
+#                             try:
+#                                 if s3_session is not None:
+#                                     message_content = s3_session.get_object(m_body)
+#                                 else:
+#                                     message_content = json.loads(m_body)
+#                             except Exception:
+#                                 logger.warning(
+#                                     "Unable to handle message",
+#                                     stack_info=True
+#                                 )
+#                                 continue
+#                             if auto_delete:
+#                                 sqs_session.delete_message(
+#                                     receipt_handle=receipt_handle
+#                                 )
+#                             messages.append((receipt_handle, message_content))
+#                     else:
+#                         if poll_interval:
+#                             time.sleep(poll_interval)
+#                         else:
+#                             break
+#                 try:
+#                     f(*args, sqs_messages=messages, **kwargs)
+#                 except Exception as e:
+#                     logger.error(f"Exception {e} occurred", stack_info=True)
+#                     if error_queue is not None:
+#                         error_queue.send_message(
+#                             message=message,
+#                         )
+#         return w_f
+#     return func
