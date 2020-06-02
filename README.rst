@@ -6,11 +6,11 @@ WIP: Tucuxi
 
 |Tests| |Codecov| |PyPI| |Python Version| |Read the Docs| |License| |Black| |pre-commit| |Dependabot|
 
-.. |Tests| image:: https://github.com/luccasqdrs/tucuxi/workflows/Tests/badge.svg
-   :target: https://github.com/luccasqdrs/tucuxi/actions?workflow=Tests
+.. |Tests| image:: https://github.com/unj-inovacao/tucuxi/workflows/Tests/badge.svg
+   :target: https://github.com/unj-inovacao/tucuxi/actions?workflow=Tests
    :alt: Tests
-.. |Codecov| image:: https://codecov.io/gh/luccasqdrs/tucuxi/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/luccasqdrs/tucuxi
+.. |Codecov| image:: https://codecov.io/gh/unj-inovacao/tucuxi/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/unj-inovacao/tucuxi
    :alt: Codecov
 .. |PyPI| image:: https://img.shields.io/pypi/v/tucuxi.svg
    :target: https://pypi.org/project/tucuxi/
@@ -30,7 +30,7 @@ WIP: Tucuxi
 .. |pre-commit| image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
    :target: https://github.com/pre-commit/pre-commit
    :alt: pre-commit
-.. |Dependabot| image:: https://api.dependabot.com/badges/status?host=github&repo=luccasqdrs/tucuxi
+.. |Dependabot| image:: https://api.dependabot.com/badges/status?host=github&repo=unj-inovacao/tucuxi
    :target: https://dependabot.com
    :alt: Dependabot
 
@@ -95,7 +95,7 @@ This project was generated from `@cjolowicz`_'s `Hypermodern Python Cookiecutter
 .. _MIT: http://opensource.org/licenses/MIT
 .. _PyPI: https://pypi.org/
 .. _Hypermodern Python Cookiecutter: https://github.com/cjolowicz/cookiecutter-hypermodern-python
-.. _file an issue: https://github.com/luccasqdrs/tucuxi/issues
+.. _file an issue: https://github.com/unj-inovacao/tucuxi/issues
 .. _pip: https://pip.pypa.io/
 .. github-only
 .. _Contributor Guide: CONTRIBUTING.rst

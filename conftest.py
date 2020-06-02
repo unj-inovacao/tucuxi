@@ -1,3 +1,4 @@
+"""Some fixtures for testing the tucuxi module"""
 import boto3
 import pytest
 from moto import mock_s3
@@ -6,6 +7,11 @@ from moto import mock_sqs
 
 @pytest.fixture
 def objs():
+    """[summary]
+
+    Returns:
+        [type]: [description]
+    """
     return [
         {"key": "TEST/teste_object.json", "data": "TEST DATA"},
         {"key": "TEST/teste_object2.json", "data": "TEST DATA 2"},
@@ -14,6 +20,14 @@ def objs():
 
 @pytest.fixture(scope="session")
 def s3_name(request):
+    """[summary]
+
+    Args:
+        request ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     bucket_name = "test.bucket"
     mock = mock_s3()
     mock.start()
@@ -25,6 +39,14 @@ def s3_name(request):
 
 @pytest.fixture(scope="session")
 def sqs_url(request):
+    """[summary]
+
+    Args:
+        request ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     queue_name = "test_queue"
     mock = mock_sqs()
     mock.start()

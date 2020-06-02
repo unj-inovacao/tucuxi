@@ -13,9 +13,9 @@ Here is a list of important resources for contributors:
 - `Code of Conduct`_
 
 .. _MIT license: https://opensource.org/licenses/MIT
-.. _Source Code: https://github.com/luccasqdrs/tucuxi
+.. _Source Code: https://github.com/unj-inovacao/tucuxi
 .. _Documentation: https://tucuxi.readthedocs.io/
-.. _Issue Tracker: https://github.com/luccasqdrs/tucuxi/issues
+.. _Issue Tracker: https://github.com/unj-inovacao/tucuxi/issues
 
 How to report a bug
 -------------------
@@ -116,7 +116,7 @@ You can ensure that your changes adhere to the code style by reformatting with B
 It is recommended to open an issue before starting work on anything.
 This will allow a chance to talk it over with the owners and validate your approach.
 
-.. _pull request: https://github.com/luccasqdrs/tucuxi/pulls
+.. _pull request: https://github.com/unj-inovacao/tucuxi/pulls
 .. _Black: https://black.readthedocs.io/
 .. github-only
 .. _Code of Conduct: CODE_OF_CONDUCT.rst

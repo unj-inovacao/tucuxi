@@ -133,7 +133,7 @@ def mypy(session: Session) -> None:
     args = session.posargs or locations
     install_package(session)
     install(session, "mypy")
-    session.run("mypy", *args)
+    session.run("mypy", "--ignore-missing-imports", *args)
 
 
 @nox.session(python=python_versions)
@@ -141,7 +141,7 @@ def tests(session: Session) -> None:
     """Run the test suite."""
     args = session.posargs or ["--cov"]
     install_package(session)
-    install(session, "coverage[toml]", "pytest", "pytest-cov")
+    install(session, "coverage[toml]", "pytest", "pytest-cov", "moto")
     session.run("pytest", *args)
 
 

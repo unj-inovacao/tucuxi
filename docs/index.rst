@@ -11,4 +11,4 @@
    contributing
    Code of Conduct <codeofconduct>
    License <license>
-   Changelog <https://github.com/luccasqdrs/tucuxi/releases>
+   Changelog <https://github.com/unj-inovacao/tucuxi/releases>
