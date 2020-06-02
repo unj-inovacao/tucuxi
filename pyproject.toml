@@ -5,7 +5,7 @@ description = "Tucuxi"
 authors = ["Luccas Quadros <luccas.quadros@softplan.com.br>"]
 license = "MIT"
 readme = "README.rst"
-homepage = "datascience.legal"
+homepage = "https://github.com/unj-inovacao/tucuxi/"
 repository = "https://github.com/unj-inovacao/tucuxi/"
 documentation = "https://tucuxi.readthedocs.io/"
 
