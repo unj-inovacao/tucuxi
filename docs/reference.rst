@@ -10,5 +10,5 @@ Reference
 tucuxi.__main__
 ---------------
 
-.. automodule:: tucuxi.__main__
+.. automodule:: tucuxi
    :members:
