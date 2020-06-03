@@ -8,9 +8,10 @@ readme = "README.rst"
 homepage = "https://github.com/unj-inovacao/tucuxi/"
 repository = "https://github.com/unj-inovacao/tucuxi/"
 documentation = "https://tucuxi.readthedocs.io/"
+keywords = ["AWS", "S3", "SQS"]
 
 [tool.poetry.urls]
-Changelog = ""
+Changelog = "https://github.com/unj-inovacao/tucuxi/releases"
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
