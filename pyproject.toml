@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tucuxi"
-version = "0.1.1"
+version = "0.1.2"
 description = "Tucuxi"
 authors = ["Luccas Quadros <luccas.quadros@softplan.com.br>"]
 license = "MIT"
