@@ -38,18 +38,19 @@ class Session:
         """
         return self.sess
 
-    def s3(self, bucket_name: str) -> Any:
+    def s3(self, bucket_name: str, **kwargs: Any) -> Any:
         """[summary]
 
         Args:
-            bucket_name (str): [description]
+            bucket_name (str): Name of the S3 Bucket.
+            kwargs (Any): Arbitrary keyword arguments.
 
         Returns:
             Any: [description]
         """
         from tucuxi import S3  # Sorry!
 
-        return S3(bucket_name, self)
+        return S3(bucket_name, self, **kwargs)
 
     def sqs(self, queue_url: str, region: str = "us-east-1") -> Any:
         """[summary]
