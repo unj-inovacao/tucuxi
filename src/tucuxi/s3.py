@@ -14,12 +14,18 @@ logger = logging.getLogger(__name__)
 class S3:
     """S3 Client."""
 
-    def __init__(self, bucket_name: str, session: Optional[Session] = None) -> None:
+    def __init__(
+        self,
+        bucket_name: str,
+        session: Optional[Session] = None,
+        config: Optional[botocore.client.Config] = None,
+    ) -> None:
         """[summary]
 
         Args:
             bucket_name (str): [description]
             session (Optional[Session]): [description]. Defaults to None.
+            config (Optional[Config]): botocore Config object for setting S3 Client. Defaults to None.
         """
         if not session:
             session = Session()
@@ -27,9 +33,7 @@ class S3:
 
         resource = sess.resource("s3")
 
-        self.client = sess.client(
-            "s3", config=botocore.client.Config(max_pool_connections=1000)
-        )
+        self.client = sess.client("s3", config=config)
 
         self.bucket_name = bucket_name
         self.client.head_bucket(Bucket=self.bucket_name)
