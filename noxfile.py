@@ -44,6 +44,7 @@ class Poetry:
                 "export",
                 *args,
                 "--format=requirements.txt",
+                "--without-hashes",
                 f"--output={requirements}",
                 external=True,
             )
@@ -122,7 +123,7 @@ def precommit(session: Session) -> None:
 def safety(session: Session) -> None:
     """Scan dependencies for insecure packages."""
     poetry = Poetry(session)
-    with poetry.export("--dev", "--without-hashes") as requirements:
+    with poetry.export("--dev") as requirements:
         install(session, "safety")
         session.run("safety", "check", f"--file={requirements}", "--bare")
 
